@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { Command } from "commander";
-import { resolveNetworkUrl } from "./lib/network.js";
+import { resolveNetworkUrl, Network } from "./lib/network.js";
 import { runUpdateCheck, shouldRunUpdateCheck } from "./lib/updateCheck.js";
 import { registerTx } from "./commands/tx.js";
 import { registerAccount } from "./commands/account.js";
@@ -48,7 +48,7 @@ program.hook("preAction", (thisCommand) => {
   const opts = thisCommand.opts<{ url?: string; network?: string; updateCheck?: boolean }>();
   const fileConfig = readConfigFile();
   const rawUrl = opts.url ?? fileConfig.url;
-  thisCommand.setOptionValue("url", resolveNetworkUrl(opts.network as any, rawUrl));
+  thisCommand.setOptionValue("url", resolveNetworkUrl(opts.network as Network | undefined, rawUrl));
   runUpdateCheck(version, shouldRunUpdateCheck(opts.updateCheck, fileConfig.updateCheck));
 });
 
