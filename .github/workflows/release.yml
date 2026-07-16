@@ -55,8 +55,11 @@ jobs:
         if: steps.cli-check.outputs.exists == 'true'
         uses: changesets/action@v1
         with:
+          # .changeset/ and package.json both live in packages/cli, which
+          # isn't an npm workspace root — point the action there directly.
+          cwd: packages/cli
           # Command that changesets/action calls when it decides to publish.
-          publish: npm run changeset:publish --prefix packages/cli
+          publish: npm run changeset:publish
           # Optional: customise the version-bump PR title / commit message.
           title: "chore: version packages"
           commit: "chore: version packages"
